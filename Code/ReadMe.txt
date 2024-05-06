@@ -34,15 +34,17 @@ A -- Start the C++ Bots
 
 - Navigate in a terminal to the GeneSimulation_cpp folder
 - Compile the code: g++ main.cpp -o jhgsim
-- Run the code: ./jhgsim play ../ResultsSaved/theGenerations 100 3 99 10 30 best_agents equal 0 nondeterministic humanConfig
+- Run the code:
+    a) with randomly selected CAB agents used in user study: ./jhgsim play ../ResultsStudy 60 3 199 10 30 best_agents equal 0 nondeterministic humanConfig
+    b) with randomly selected CAB agents from other training: ./jhgsim play ../ResultsSaved/theGenerations 100 3 99 10 30 best_agents equal 0 nondeterministic humanConfig
 
 Parameters:
 0: executable (don't change)
 1: code directive to play a single game (don't change)
 2: Folder where parameters of trained CAB agent are stored.  ResultsSaved/theGenerations contains already trained agents for 100 generations.  Newly trained agents will be stored in the folder specified (see 2a)
-3: Number of agents in the gene pool (100 used here -- must be the same as was used in training)
+3: Number of agents in the gene pool (must be the same as number of agents in available gene pool)
 4: Number of sets of genes.  3 was used for the CAB agents in the paper.  1 is also useable, but must correspond to how the agents were trained
-5: Generation number (0 to 99) that you want to draw CAB agents from
+5: Generation number that you want to draw CAB agents from (199 for user study, 0-99 for other pretrained)
 6: Number of CAB agents to put into the game
 7: Number of rounds in the game
 8: Select the best agents (best_agents) or random agents (rnd_agents) from the gene pool
@@ -102,7 +104,9 @@ Parameters:
 A -- Start the Python3 Bots
 
 - Navigate in a terminal to the GeneSimulation_py folder
-- Run the code: python3 main.py play ../ResultsSaved/theGenerations 100 3 99 10 30 best_agents equal 0 nondeterministic humanConfig
+- Run the code: 
+    a) with randomly selected CAB agents used in user study: python3 main.py play ../ResultsStudy 60 3 199 10 30 best_agents equal 0 nondeterministic humanConfig
+    b) with randomly selected CAB agents from other training: python3 main.py play ../ResultsSaved/theGenerations 100 3 99 10 30 best_agents equal 0 nondeterministic humanConfig
 
 Parameters:
 0: main.py (start of the program)
