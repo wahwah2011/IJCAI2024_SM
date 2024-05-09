@@ -528,34 +528,34 @@ def writeGenerationResultsSorted(thePopulation, popSize, gen, agentsPerGame):
 
     print("Average population fitness of generation " + str(gen) + ": " + str(sum / popSize))
 
-def readScript(scriptName):
-    fnombre = "scripts/" + scriptName + ".txt"
-    fp = open(fnombre)
+# def readScript(scriptName):
+#     fnombre = "scripts/" + scriptName + ".txt"
+#     fp = open(fnombre)
 
-    numAgents = int(fp.readline())
-    numRounds = int(fp.readline())
+#     numAgents = int(fp.readline())
+#     numRounds = int(fp.readline())
 
-    # thePlan = []
+#     # thePlan = []
     
-    for r in range(0, numRounds):
-        # round = []
-        fp.readline()
-        for i in range(0, numAgents):
-            words = fp.readline().split(" ")
-            map_object = map(int, words)
-            list_of_integers = list(map_object)
-            if i == 0:
-                round = [list_of_integers]
-            else:
-                round.append(list_of_integers)
-        if r == 0:
-            thePlan = [round]
-        else:
-            thePlan.append(round)
+#     for r in range(0, numRounds):
+#         # round = []
+#         fp.readline()
+#         for i in range(0, numAgents):
+#             words = fp.readline().split(" ")
+#             map_object = map(int, words)
+#             list_of_integers = list(map_object)
+#             if i == 0:
+#                 round = [list_of_integers]
+#             else:
+#                 round.append(list_of_integers)
+#         if r == 0:
+#             thePlan = [round]
+#         else:
+#             thePlan.append(round)
 
-    fp.close()
+#     fp.close()
 
-    return numAgents, numRounds, thePlan
+#     return numAgents, numRounds, thePlan
 
 
 def define_initial_pops(init_pop, num_players):
@@ -616,7 +616,8 @@ if __name__ == '__main__':
         if sys.argv[8] == "best_agents":
             player_idxs = list(np.arange(0,numAgents))
         elif sys.argv[8] == "rnd_agents":
-            player_idxs = np.random.choice(np.arange(len(theGenePools[0])-1), size=numAgents, replace=False)
+            # player_idxs = np.random.choice(np.arange(len(theGenePools[0])-1), size=numAgents, replace=False)
+            player_idxs = np.random.choice(np.arange(popSize), size=numAgents, replace=False)
         else:
             print("don't understand agentSelection: " + sys.argv[8] + "; Must be best_agents or rnd_agents")
             sys.exit()           
