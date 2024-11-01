@@ -2315,6 +2315,9 @@ private:
         // printT(playerIdx, "meImport: " + vec2String(meImporta, numPlayers));
 
         double *myCommVec = new double[numPlayers];
+        for (int i = 0; i < numPlayers; ++i) {
+            myCommVec[i] = 0.0;
+        }	    
         for (set<int>::iterator i = selectedCommunity.begin(); i != selectedCommunity.end(); i++) {
             if ((*i == playerIdx) || (meImporta[*i] > 0.1))
                 myCommVec[*i] = 1.0;
