@@ -30,7 +30,7 @@ class theButton {
 		//System.out.println(mx + ", " + my);
 		if ((Math.abs(mx - x) <= (w / 2)) && (Math.abs((my-6) - y) <= (h / 2)))
 			return true;
-		
+
 		return false;
 	}
 }
@@ -102,7 +102,7 @@ class myCanvas extends JComponent {
 				popularities[j][i] = 1.0;
 			}
 		}
-		
+
 		submit = new theButton(60, 108 + numPlayers*25, 100, 30);
 		minusButtons = new theButton[numPlayers];
 		plusButtons = new theButton[numPlayers];
@@ -184,7 +184,7 @@ class myCanvas extends JComponent {
 				int count = 1;
 				if (!isLeft)
 					count = 5;
-				
+
 				for (int j = 0; j < count; j++) {
 					if (allocations[i] > 0) {
 						allocations[i] --;
@@ -204,7 +204,7 @@ class myCanvas extends JComponent {
 				int count = 1;
 				if (!isLeft)
 					count = 5;
-				
+
 				for (int j = 0; j < count; j++) {
 					if (allocations[i] < 0) {
 						allocations[i] ++;
@@ -222,7 +222,7 @@ class myCanvas extends JComponent {
 		}
 
 		if (submit.onButton(x, y)) {
-			// System.out.println("Submit!");
+			System.out.println("Submit!");
 			try {
 				String fnombre = "../State/HumanAllocations.tmp";
 				BufferedWriter writer = new BufferedWriter(new FileWriter(fnombre));		
@@ -235,8 +235,41 @@ class myCanvas extends JComponent {
 				writer.close();
 
 				Runtime rt = Runtime.getRuntime();
-				String mandato = "mv ../State/HumanAllocations.tmp ../State/HumanAllocations.txt";
-				Process pr = rt.exec(mandato);
+
+				//attempt to ensure moving the file works on both Windows and Linux
+
+				if (System.getProperty("os.name").startsWith("Windows")) {
+                    System.out.println("This is where we have ended up");
+
+                    File sourceFile = new File("../State/HumanAllocations.tmp");
+                    File destFile = new File("../State/HumanAllocations.txt");
+
+                    // Delete the destination file if it exists
+                    if (destFile.exists()) {
+                        boolean deleted = destFile.delete();
+                        if (!deleted) {
+                            System.out.println("Failed to delete existing destination file.");
+                            return; // Exit if the file can't be deleted
+                        }
+                    }
+
+                    // Attempt to rename (move) the file
+                    boolean success = sourceFile.renameTo(destFile);
+
+                    if (success) {
+                        System.out.println("File moved successfully!");
+                    } else {
+                        System.out.println("Failed to move the file.");
+                    }
+                }
+		        else {
+		            var thisName = System.getProperty("os.name");
+		            System.out.println("This is what we get for the OS name " + thisName);
+
+		            String mandato = "mv ../State/HumanAllocations.tmp ../State/HumanAllocations.txt";
+				    Process pr = rt.exec(mandato);
+		        }
+
 			}
 			catch (IOException e) {
 				System.out.println(e);
@@ -302,7 +335,7 @@ class myCanvas extends JComponent {
 				if (round != oldRound) {
 					for (int i = 0; i < numPlayers; i++)
 						allocations[i] = 0;
-		
+
 					if (humanIndex >= 0)
 						// specify the number of tokens
 						// allocations[humanIndex] = numPlayers;
@@ -457,10 +490,10 @@ class myCanvas extends JComponent {
 		mousePunto.y = mousePunto.y - screenY;
 		//System.out.println(mousePunto.x + ", " + mousePunto.y);
 		popMsg = "";
-	
+
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, 800, 800);
-		
+
 		drawHeaders(g);
 
 		double tornadoAmplification = 0;
@@ -596,7 +629,7 @@ class myCanvas extends JComponent {
 
 	public int[][] inferTokenAllocations(int numTokens) {
 		int inferredTokens[][] = new int[numPlayers][numPlayers];
-		
+
 		for (int idx = 0; idx < numPlayers; idx++) {
 			// giving
 			double giveWorth = give_coef * popularities[round-1][idx] * (1.0 / numTokens) * alpha;
@@ -668,7 +701,7 @@ class myCanvas extends JComponent {
 		for (int idx = 0; idx < numPlayers; idx++) {
 			if (idx == humanIndex)
 				continue;
-				
+
 			int ttl = 0;
 			for (int i = 0; i < numPlayers; i++)
 				ttl += Math.abs(inferredTokens[idx][i]);
@@ -839,7 +872,7 @@ class myCanvas extends JComponent {
 		// 		giveLoss = (influence[idx][i] - (prevInfluence[idx][i] * (1.0 - alpha))) / give_coef;
 		// 	else
 		// 		giveLoss = 0.0;
-			
+
 		// 	if (influence[i][idx] > 0.0)
 		// 		receiveGain = influence[i][idx] - (prevInfluence[i][idx] * (1.0 - alpha));
 		// 	else
@@ -1123,7 +1156,7 @@ class myCanvas extends JComponent {
 
 		if (attackStrength == 0)
 			return steal_coef;
-			
+
 		double coef = 1 - (keepStrength / attackStrength);
 		if (coef > 0.0)
 			return steal_coef * coef;
@@ -1462,7 +1495,7 @@ class Human extends JFrame implements ComponentListener, MouseListener {
 			//System.out.println("Mouse clicked: " + e.getX() + ", " + e.getY());
 			isLeft = false;
 		}
-	
+
 		canvas.theClick(isLeft, e.getX(), e.getY()-25);
 	}
 

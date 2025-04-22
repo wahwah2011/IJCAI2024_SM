@@ -12,8 +12,8 @@ class HumanAgent : public AbstractAgent {
 public:
     HumanAgent() {
         whoami = "human";
-        system("rm ../State/HumanAllocations.txt");
-        system("rm ../State/visualTraits.txt");
+        system("del ../State/HumanAllocations.txt");
+        system("del ../State/visualTraits.txt");
     }
 
     ~HumanAgent() {
@@ -53,3 +53,5 @@ public:
     void postContract(int playerIdx) {}
 
 };
+
+#endif // HUMANAGENT_H

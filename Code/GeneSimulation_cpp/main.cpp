@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 
 #include "AbstractAgent.h"
 #include "GeneAgent.h"
@@ -10,6 +11,7 @@
 #include "CoOpAgent.h"
 #include "assassinAgent.h"
 #include "JHGEngine.h"
+#include "GoodAgent.h"
 
 using namespace std;
 
@@ -35,7 +37,7 @@ GeneAgent **loadPopulationsFromFile(string theFolder, int theGen, int popSize, i
         // read in all of the GeneAgents
         // cout << "theGen: " << theGen << endl;
         // string fnombre = theFolder + "/" + to_string(i) + "/gen_" + to_string(theGen) + ".csv";
-        
+
         string line;
         getline(input, line);
         vector<string> words = split(line);
@@ -199,7 +201,8 @@ void recordState(int roundNum, JHGEngine *jhg, int humanInd, bool gameOver) {
 
     output.close();
 
-    system("mv ../State/state.tmp ../State/state.txt");
+    //TODO: figure out what this 'mv' does :o
+    system("move ../State/state.tmp ../State/state.txt");
 }
 
 PopularityMetrics *playGame(AbstractAgent **agents, int numPlayers, int numRounds, int gener, int gamer, double *initialPopularities, double povertyLine, bool forcedRandom) {
@@ -208,7 +211,7 @@ PopularityMetrics *playGame(AbstractAgent **agents, int numPlayers, int numRound
     double coefs[3] = {0.95, 1.3, 1.6};
 
     // delete all existing contracts
-    system("rm Contracts/*");
+    system("del Contracts/*");
 
     // tell agents the game parameters and give each the chance to post a contract
     for (int i = 0; i < numPlayers; i++) {
@@ -233,7 +236,7 @@ PopularityMetrics *playGame(AbstractAgent **agents, int numPlayers, int numRound
     int **transactions = new int*[numPlayers];
     for (int i = 0; i < numPlayers; i++)
         transactions[i] = new int[numPlayers];
-    
+
     PopularityMetrics *pmetrics = new PopularityMetrics[numPlayers];
     for (int i = 0; i < numPlayers; i++) {
         pmetrics[i].avePop = 0.0;
@@ -474,6 +477,8 @@ int main(int argc, char *argv[]) {
                     configuredPlayers.push_back(new HumanAgent());
                 else if (line == "Assassin")
                     configuredPlayers.push_back(new assassinAgent());
+                else if (line == "Good")
+                    configuredPlayers.push_back(new GoodAgent());           // add the GoodAgent
                 else if ((line.length() >= 4) && (line.substr(0,4) == "CoOp"))
                     configuredPlayers.push_back(new CoOpAgent(line));
             }
@@ -529,6 +534,8 @@ int main(int argc, char *argv[]) {
                 delete ((HumanAgent *)configuredPlayers[i]);
             else if (configuredPlayers[i]->whoami == "assassin")
                 delete ((assassinAgent *)configuredPlayers[i]);
+            else if (configuredPlayers[i]->whoami == "good")
+                delete ((GoodAgent *)configuredPlayers[i]);
             else if ((configuredPlayers[i]->whoami.length() >= 4) && (configuredPlayers[i]->whoami.substr(0,4) == "CoOp"))
                 delete ((CoOpAgent *)configuredPlayers[i]);
             else {
@@ -571,6 +578,8 @@ int main(int argc, char *argv[]) {
                     configuredPlayers.push_back(new HumanAgent());
                 else if (line == "Assassin")
                     configuredPlayers.push_back(new assassinAgent());
+                else if (line == "Good")
+                    configuredPlayers.push_back(new GoodAgent());           // add the GoodAgent
                 if ((line.length() >= 4) && (line.substr(0,4) == "CoOp"))
                     configuredPlayers.push_back(new CoOpAgent(line));
             }
@@ -632,7 +641,7 @@ int main(int argc, char *argv[]) {
                     sel = 0;
                 cout << possibleInitPops[sel] << endl;
                 defineInitialPopularities(possibleInitPops[sel], numPlayers, initialPopularities);
-                
+
                 printf("i_pops: ");
                 double s = 0.0;
                 for (int i = 0; i < numPlayers; i++) {
@@ -718,6 +727,8 @@ int main(int argc, char *argv[]) {
                 delete ((HumanAgent *)configuredPlayers[i]);
             else if (configuredPlayers[i]->whoami == "assassin")
                 delete ((assassinAgent *)configuredPlayers[i]);
+            else if (configuredPlayers[i]->whoami == "good")
+                delete ((GoodAgent *)configuredPlayers[i]);           // delete the GoodAgent
             else if ((configuredPlayers[i]->whoami.length() >= 4) && (configuredPlayers[i]->whoami.substr(0,4) == "CoOp"))
                 delete ((CoOpAgent *)configuredPlayers[i]);
             else {
@@ -773,7 +784,7 @@ int main(int argc, char *argv[]) {
 
         double *initialPopularities = new double[numPlayers];
         defineInitialPopularities(initPopType, numPlayers, initialPopularities);
-        
+
         PopularityMetrics *pmetrics = playGame(agents, numPlayers, numRounds, 1000, 1000, initialPopularities, 0.0, false);
 
         // delete stuff
@@ -791,4 +802,4 @@ int main(int argc, char *argv[]) {
     }
 
     return 0;
-}
+} // end main
