@@ -53,5 +53,3 @@ public:
     void postContract(int playerIdx) {}
 
 };
-
-#endif
