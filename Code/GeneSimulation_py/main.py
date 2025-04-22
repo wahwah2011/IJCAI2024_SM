@@ -225,7 +225,7 @@ def recordState(round_num, sim, humanPlayerInd, gameOver):
 
     output.close()
 
-    os.system("mv ../State/state.tmp ../State/state.txt")
+    os.system("move ../State/state.tmp ../State/state.txt")
 
 def findHumanPlayer(players):
     numPlayers = len(players)
@@ -642,6 +642,8 @@ if __name__ == '__main__':
                 elif line[0:8] == "Assassin":
                     # print('adding an assassin')
                     configuredPlayers.append(AssassinAgent())
+                elif line[0:5] == "Good":
+                    configuredPlayers.append(GeneAgent3(line))
             fp.close()
 
         except IOError:
