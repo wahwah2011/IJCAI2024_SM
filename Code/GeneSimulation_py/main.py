@@ -2,6 +2,7 @@ from simulator import GameSimulator
 from randomagent import RandomAgent
 from geneagent3 import GeneAgent3
 from humanagent import HumanAgent
+from goodagent import GoodAgent
 from assassinagent import AssassinAgent
 # from scriptagent import ScriptAgent
 from govtagent import DummyGovtAgent
@@ -31,6 +32,8 @@ def play_game(agents, rounds, gener, gamer, initial_pops, poverty_line, forcedRa
     players = [
         *agents
     ]
+
+    print("forced random: " + str(forcedRandom))
 
     alpha_min, alpha_max = 0.20, 0.20
     beta_min, beta_max = 0.5, 1.0
@@ -635,15 +638,16 @@ if __name__ == '__main__':
             fp = open(fnombre, 'r')
             Lines = fp.readlines()
             for line in Lines:
-                # print("<" + line + ">")
+                print("<" + line + ">")
                 if line[0:5] == "Human":
-                    # print('adding a human player')
+                    print('adding a human player')
                     configuredPlayers.append(HumanAgent())
                 elif line[0:8] == "Assassin":
-                    # print('adding an assassin')
+                    print('adding an assassin')
                     configuredPlayers.append(AssassinAgent())
-                elif line[0:5] == "Good":
-                    configuredPlayers.append(GeneAgent3(line))
+                elif line[0:4] == "Good":
+                    print('adding a good player in main')
+                    configuredPlayers.append(GoodAgent())
             fp.close()
 
         except IOError:
@@ -651,6 +655,7 @@ if __name__ == '__main__':
 
 
         print("num configured players: " + str(len(configuredPlayers)))
+        print("player types: " + str([str(p.whoami) for p in configuredPlayers]))
 
         theGenePools = loadPopulationFromFile(popSize, theFolder, theGen, num_gene_copies)
 
@@ -665,11 +670,13 @@ if __name__ == '__main__':
         plyrs = []
         for i in range(0, len(player_idxs)):
             if player_idxs[i] >= popSize:
-                plyrs.append(configuredPlayers[player_idxs[i] - popSize])
+                plyrs.append(configuredPlayers[int(player_idxs[i]) - popSize])
             else:
                 plyrs.append(theGenePools[player_idxs[i]])
         players = np.array(plyrs)
         # print(len(players))
+
+        print("forced random: " + str(forcedRandom))
 
         result, avePop = play_game(list(players), numRounds, 1000, 1000, initial_pops, poverty_line, forcedRandom)
         print("endPop: " + str(result))

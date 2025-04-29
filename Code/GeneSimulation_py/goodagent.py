@@ -3,7 +3,7 @@ from typing import List, Optional
 import numpy as np
 
 class GoodAgent(AbstractAgent):
-    POVERTY_THRESHOLD = 0.3
+    POVERTY_THRESHOLD = 0.3 #can adjust to refect different levels of poverty awareness
 
     def __init__(self):
         print("GoodAgent")
@@ -16,6 +16,10 @@ class GoodAgent(AbstractAgent):
     def __del__(self):
         # No need for explicit delete in Python
         pass
+
+    def setGameParams(self, gameParams, _forcedRandom):
+        self.gameParams = gameParams
+        self.force_random = _forcedRandom
 
     def play_round(self, num_players: int, num_tokens: int, player_idx: int, round_num: int,
                    received: List[float], popularities: List[float],

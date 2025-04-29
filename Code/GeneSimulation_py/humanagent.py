@@ -24,6 +24,9 @@ class HumanAgent(AbstractAgent):
 
         while True:
             
+            #print(os.path.abspath("../State/HumanAllocations.txt"))
+            #print(os.path.isfile("../State/HumanAllocations.txt"))
+
             if exists("../State/HumanAllocations.txt"):
                 input = open("../State/HumanAllocations.txt", "r")
                 r = int(input.readline())
